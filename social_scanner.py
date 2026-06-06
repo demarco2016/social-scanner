@@ -18,4 +18,34 @@ def get_cryptopanic():
     return []
 
 def get_coingecko_news():
-    url = "https:
+    url = "https://api.coingecko.com/api/v3/news"
+    res = requests.get(url)
+    if res.status_code == 200:
+        news = res.json().get("data", [])[:5]
+        return [f"🔥 {n['title']}" for n in news]
+    return []
+
+def run():
+    print("\nSocial Scanner - Crypto News\n")
+    msg = "Social Scanner - Crypto News\n\n"
+
+    print("--- CryptoPanic ---")
+    msg += "--- CryptoPanic ---\n"
+    for n in get_cryptopanic():
+        print(n)
+        msg += n + "\n"
+
+    print("\n--- CoinGecko News ---")
+    msg += "\n--- CoinGecko News ---\n"
+    for n in get_coingecko_news():
+        print(n)
+        msg += n + "\n"
+
+    send_telegram(msg)
+
+REFRESH_MINUTES = 10
+
+while True:
+    run()
+    print(f"\nNext check in {REFRESH_MINUTES} min...\n")
+    time.sleep(REFRESH_MINUTES * 60)
