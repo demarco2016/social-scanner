@@ -30,4 +30,25 @@ def get_coingecko_news():
 
 def run():
     print("\nSocial Scanner - Crypto News\n")
-    msg = "Socia
+    msg = "Social Scanner\n\n"
+    sources = [
+        ("https://cointelegraph.com/rss", "CoinTelegraph"),
+        ("https://decrypt.co/feed", "Decrypt"),
+    ]
+    for url, name in sources:
+        news = get_rss(url, name)
+        for n in news:
+            print(n)
+            msg += n + "\n"
+    for n in get_coingecko_news():
+        print(n)
+        msg += n + "\n"
+    send_telegram(msg)
+    print()
+
+REFRESH_MINUTES = 10
+
+while True:
+    run()
+    print(f"\nNext check in {REFRESH_MINUTES} min...\n")
+    time.sleep(REFRESH_MINUTES * 60)
